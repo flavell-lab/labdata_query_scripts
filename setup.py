@@ -8,6 +8,6 @@ setup(
     author_email="lualicia88@gmail.com",
     install_requires=["numpy"],
     license="MIT",
-    description="query toolkit for flavell lab's whole-brain imaging datasets"
+    description="query toolkit for flavell lab's whole-brain imaging datasets",
     url="https://github.com/flavell-lab/labdata_query_scripts"
 )
