@@ -14,7 +14,7 @@ def find_common_neurons_for_datasets(datasets):
             …
         }
     """
-    data_path = "/home/alicia/data3_personal/lab_metadata"
+    data_path = "lab_metadata"
 
     with open(f"{data_path}/dataset_to_unmerged_neurons.json", "r") as f:
         matches_unmerged = json.load(f)
@@ -68,7 +68,7 @@ def find_common_datasets_for_neurons(neurons):
             …
         }
     """
-    data_path = "/home/alicia/data3_personal/lab_metadata"
+    data_path = "lab_metadata"
 
     with open(f"{data_path}/unmerged_neuron_to_datasets.json", "r") as f:
         matches_unmerged = json.load(f)
