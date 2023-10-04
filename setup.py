@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='labdata_query_scripts',
-    version='0.1',
+    name="metadata_queries",
+    version="0.1",
     packages=find_packages(),
     author="Alicia Lu",
     author_email="lualicia88@gmail.com",
