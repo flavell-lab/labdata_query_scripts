@@ -88,7 +88,7 @@ returns
 
 ###### command to run
   ```console
-  $ python query.py -d neuronA neuronB neuronC
+  $ python query.py -n neuronA neuronB neuronC
   ```
 ###### output
 ```py
