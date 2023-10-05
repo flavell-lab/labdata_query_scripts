@@ -108,7 +108,7 @@ returns
 ```
 ###### example
   ```console
-  python query.py -n URBL SMB RMDVL OLQVR RIA
+  $ python query.py -n URBL SMB RMDVL OLQVR RIA
   ```
  returns
   ```py
