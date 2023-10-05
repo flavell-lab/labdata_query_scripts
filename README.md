@@ -1,19 +1,18 @@
 # FlavellLab: Whole-Brain Imaging Metadata Query Toolkit
 A toolkit designed for effortlessly querying metadata from whole-brain imaging datasets using intuitive command-line instructions
+
 ## table of contents
-- [FlavellLab: Whole-Brain Imaging Metadata Query Toolkit](#flavelllab-whole-brain-imaging-metadata-query-toolkit)
-  - [table of contents](#table-of-contents)
-  - [installation](#installation)
-  - [usage](#usage)
-        - [Provide specific datasets and query for neurons common to them](#provide-specific-datasets-and-query-for-neurons-common-to-them)
-          - [command to run](#command-to-run)
-          - [output](#output)
-          - [example](#example)
-        - [Provide specific neurons and query for datasets associated with them](#provide-specific-neurons-and-query-for-datasets-associated-with-them)
-          - [command to run](#command-to-run-1)
-          - [output](#output-1)
-          - [example](#example-1)
-  - [caveat](#caveat)
+- [installation](#installation)
+- [usage](#usage)
+    - [Provide specific datasets and query for neurons common to them](#provide-specific-datasets-and-query-for-neurons-common-to-them)
+        - [command to run](#command-to-run)
+        - [output](#output)
+        - [example](#example)
+    - [Provide specific neurons and query for datasets associated with them](#provide-specific-neurons-and-query-for-datasets-associated-with-them)
+        - [command to run](#command-to-run-1)
+        - [output](#output-1)
+        - [example](#example-1)
+- [caveat](#caveat)
 
 ## installation
 To install the package locally, run the following commands
