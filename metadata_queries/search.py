@@ -109,3 +109,57 @@ def find_common_datasets_for_neurons(neurons):
 
     return output_dict
 
+
+def find_common_datasets_for_flex_neurons(neurons):
+
+    """Find all the datasets that contains either the given neurons or the
+    'flexible' versions of the given neurons; for instance, if one of the given
+    neurons is `SMD`, the function seeks datasets that contain `SMDD?`,
+    `SMDDL`, `SMDDR`, `SMDVL`, and `SMDVR`.
+    The output dictionary is structured as follows:
+        {
+            dataset_name: {
+                neuron_A: indexA,
+                neuron_B: indexB,
+                …
+            }
+            …
+        }
+    """
+    data_path = "lab_metadata"
+    with open(f"{data_path}/unmerged_neuron_to_datasets.json", "r") as f:
+        matches_unmerged = json.load(f)
+
+    patterns = [re.compile(neuron) for neuron in neurons]
+    subset_matches_unmerged = dict()
+
+    # create subset information dictionary whose keys match with the flexible
+    # patterns of neurons
+
+    for pattern in patterns:
+        for neuron, datasets in matches_unmerged.items():
+            if pattern.search(neuron):
+                subset_matches_unmerged[neuron] = datasets
+
+    # find common datasets shared by the neurons
+
+    flex_neurons = list(subset_matches_unmerged.keys())
+    all_datasets = []
+    for neuron in flex_neurons:
+        all_datasets.append(list(subset_matches_unmerged[neuron].keys()))
+
+    sets_of_datasets = [set(datasets) for datasets in all_datasets]
+    common_datasets = list(set.intersection(*sets_of_datasets))
+
+    # format the output dictionary
+
+    output_dict = dict()
+    for common_dataset in common_datasets:
+        output_dict[common_dataset] = dict()
+
+        for neuron in flex_neurons:
+            neuron_index = subset_matches_unmerged[neuron][common_dataset]
+            output_dict[common_dataset][neuron] = neuron_index
+
+    return output_dict
+
