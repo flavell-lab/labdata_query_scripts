@@ -1,4 +1,6 @@
+from itertools import chain, combinations
 import json
+import re
 
 
 def find_common_neurons_for_datasets(datasets):
@@ -126,15 +128,16 @@ def find_common_datasets_for_flex_neurons(neurons):
             …
         }
     """
-    data_path = "lab_metadata"
+    data_path = "/home/alicia/data3_personal/lab_metadata"
     with open(f"{data_path}/unmerged_neuron_to_datasets.json", "r") as f:
         matches_unmerged = json.load(f)
 
-    patterns = [re.compile(neuron) for neuron in neurons]
+    patterns = [re.compile(neuron + ".*") for neuron in neurons]
     subset_matches_unmerged = dict()
 
-    # create subset information dictionary whose keys match with the flexible
-    # patterns of neurons
+    # create subset information dictionary whose keys are the flexible neuron
+    # names (meaning they don't have to match exactly with the given neurons),
+    # whose values are the datasets containing the flexible neuron
 
     for pattern in patterns:
         for neuron, datasets in matches_unmerged.items():
@@ -144,22 +147,78 @@ def find_common_datasets_for_flex_neurons(neurons):
     # find common datasets shared by the neurons
 
     flex_neurons = list(subset_matches_unmerged.keys())
-    all_datasets = []
-    for neuron in flex_neurons:
-        all_datasets.append(list(subset_matches_unmerged[neuron].keys()))
 
-    sets_of_datasets = [set(datasets) for datasets in all_datasets]
-    common_datasets = list(set.intersection(*sets_of_datasets))
+    subset_dataset_list = find_common_datasets_for_neuron_subsets(
+                flex_neurons,
+                subset_matches_unmerged
+    )
 
     # format the output dictionary
 
     output_dict = dict()
-    for common_dataset in common_datasets:
-        output_dict[common_dataset] = dict()
 
-        for neuron in flex_neurons:
-            neuron_index = subset_matches_unmerged[neuron][common_dataset]
-            output_dict[common_dataset][neuron] = neuron_index
+    for neuron_subset, common_datasets in subset_dataset_list:
+
+        subset_name = "-".join(neuron_subset)
+        output_dict[subset_name] = dict()
+
+        for common_dataset in common_datasets:
+            output_dict[subset_name][common_dataset] = dict()
+
+            for neuron in neuron_subset:
+                neuron_index = subset_matches_unmerged[neuron][common_dataset]
+                output_dict[subset_name][common_dataset][neuron] = neuron_index
 
     return output_dict
+
+
+def find_common_datasets_for_neuron_subsets(neurons, matches):
+
+    """Find the nonempty datasets for subsets of the given neurons
+
+    Args:
+        neurons: a list of neuron names
+        matches: a dictionary with neuron names as keys, the datasets
+            containing them as values; it is structured as follows:
+                {
+                    neuron_A: {
+                                dataset_1: index1,
+                                dataset_2: index2,
+                                …
+                    }
+                    …
+                }
+    """
+    all_subsets = powerset(neurons)
+    max_num_common_datasets = 0
+    max_common_datasets = []
+    best_subset = []
+    output_list = []
+
+    for subset in all_subsets:
+
+        all_datasets = []
+        for neuron in subset:
+            all_datasets.append(list(matches[neuron].keys()))
+
+        sets_of_datasets = [set(datasets) for datasets in all_datasets]
+        common_datasets = list(set.intersection(*sets_of_datasets))
+
+        if len(common_datasets) > 0:
+            output_list.append((subset, common_datasets))
+
+        if len(common_datasets) >= max_num_common_datasets:
+            max_num_common_datasets = len(common_datasets)
+            max_common_datasets[:] = common_datasets
+            best_subset[:] = subset
+
+    return output_list
+
+
+def powerset(iterable):
+
+    s = list(iterable)
+    all_combinations = list(chain.from_iterable(combinations(s, r) for r in range(len(s) + 1)))
+
+    return [subset for subset in all_combinations if len(subset) > 0]
 

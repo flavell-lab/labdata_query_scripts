@@ -15,12 +15,17 @@ def main():
     parser.add_argument('-n', '--neurons', type=str, nargs='+',
                         help='List of neuron names like "AVB"')
 
+    # Use '-fn' or 'flex-neurons' flag for flexible neuron names
+    parser.add_argument('-fn', '--flexneurons', type=str, nargs='+',
+                        help='List of neuron names like "AVB"')
+
     args = parser.parse_args()
     if args.datasets:
         pprint(find_common_neurons_for_datasets(args.datasets))
     if args.neurons:
         pprint(find_common_datasets_for_neurons(args.neurons))
-
+    if args.flexneurons:
+         pprint(find_common_datasets_for_flex_neurons(args.flexneurons))
 
 if __name__ == "__main__":
     main()
